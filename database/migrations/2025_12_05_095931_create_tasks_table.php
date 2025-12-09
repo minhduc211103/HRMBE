@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('status')->default('todo');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->unsignedInteger('process')->default(0);
+            $table->unsignedInteger('progress')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

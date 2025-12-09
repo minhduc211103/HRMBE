@@ -12,7 +12,7 @@ class Project extends Model
     use HasFactory , SoftDeletes;
     protected $fillable = [
         'manager_id', 'name', 'description',
-        'status', 'start_date', 'end_date', 'process'
+        'status', 'start_date', 'end_date', 'progress'
     ];
     protected $table = 'projects';
     protected $primaryKey = 'id';
