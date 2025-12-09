@@ -23,5 +23,11 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     });
     Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
     Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
+
+    Route::get('/projects/create', [\App\Http\Controllers\ProjectController::class, 'create'])->name('admin.projects.create');
+    Route::post('/projects', [\App\Http\Controllers\ProjectController::class, 'store'])->name('admin.projects.store');
+
+    Route::get('/meetings/create', [\App\Http\Controllers\MeetingController::class, 'create'])->name('admin.meetings.create');
+    Route::post('/meetings', [\App\Http\Controllers\MeetingController::class, 'store'])->name('admin.meetings.store');
 });
 require __DIR__.'/auth.php';

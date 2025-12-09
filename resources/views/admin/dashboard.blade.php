@@ -13,10 +13,16 @@
                     <a href="/admin" class="nav-link text-white">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/users/create" class="nav-link text-white">➕ Thêm User</a>
+                    <a href="/admin/users/create" class="nav-link text-white">➕ New User</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/users" class="nav-link text-white">📋 Danh sách User</a>
+                    <a href="#" class="nav-link text-white">📋 User List</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/projects/create" class="nav-link text-white">➕ New Project </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-white">➕ New Meeting </a>
                 </li>
             </ul>
         </div>
@@ -29,7 +35,7 @@
 
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
-                    <button class="btn btn-danger btn-sm">Đăng xuất</button>
+                    <button class="btn btn-danger btn-sm">LOG OUT</button>
                 </form>
             </div>
 
@@ -37,7 +43,7 @@
                 <div class="col-md-3">
                     <div class="card shadow">
                         <div class="card-body">
-                            <h5>Tổng User</h5>
+                            <h5>Total users</h5>
                             <p>120</p>
                         </div>
                     </div>
