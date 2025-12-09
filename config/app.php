@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Ho_Chi_Minh',
 
     /*
     |--------------------------------------------------------------------------
@@ -122,5 +122,12 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    /*
+     * admin account
+     * */
+    'admin_username' => env('ADMIN_USERNAME', 'admin'),
+    'admin_password' => env('ADMIN_PASSWORD', '123456@admin'),
+
 
 ];
