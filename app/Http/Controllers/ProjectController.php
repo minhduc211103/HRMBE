@@ -69,7 +69,7 @@ class ProjectController extends Controller
                 // Hàm fill() sẽ điền dữ liệu vào model nhưng chưa lưu
                 $project->fill($request->validated());
 
-                if ($request->status === 'done') {
+                if ($request->status === 'completed') {
                     $project->progress = 100;
                 }
                 // 4. Lưu vào DB

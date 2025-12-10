@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('manager_id')->constrained('managers')->onDelete('set null');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('status')->default('pending');
+            $table->string('status')->default('pending'); //doi thanh new
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->unsignedInteger('progress')->default(0); // % hoàn thành

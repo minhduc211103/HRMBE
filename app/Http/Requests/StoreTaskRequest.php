@@ -34,9 +34,9 @@ class StoreTaskRequest extends FormRequest
             // Validate status nếu có gửi lên
             'status'      => 'nullable|in:todo,doing,done,review',
 
-            'start_date'  => 'nullable|date',
+            'start_date'  => 'required|date',
             // Ngày kết thúc phải sau ngày bắt đầu
-            'end_date'    => 'nullable|date|after_or_equal:start_date',
+            'end_date'    => 'required|date|after_or_equal:start_date',
 
             // Validate phần trăm hoàn thành (0 -> 100)
             // Lưu ý: Trong migration bạn đặt tên là 'process', nên ở đây cũng phải là 'process'
