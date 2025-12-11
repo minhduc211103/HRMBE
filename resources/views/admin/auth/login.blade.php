@@ -17,7 +17,6 @@
             <div class="card-body p-4">
                 <form method="POST" action="{{ route('admin.login') }}" novalidate>
                     @csrf
-
                     <!-- USERNAME -->
                     <div class="mb-3">
                         <label class="form-label">Username</label>

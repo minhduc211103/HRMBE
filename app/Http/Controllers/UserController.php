@@ -12,10 +12,15 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function index(){
+        $managers = Manager::with('employees')->get();
+//        return($managers);
+        return view('admin.hr.index', compact('managers'));
+    }
     public function create()
     {
         $managers = Manager::all();
-        return view('admin.users.create', compact('managers'));
+        return view('admin.hr.create', compact('managers'));
     }
 
     public function store(StoreUserRequest $request)
@@ -23,7 +28,7 @@ class UserController extends Controller
         DB::beginTransaction();
 
         try {
-            // ✅ 1. TẠO USER
+
             $user = User::create([
                 'email'    => $request->email,
                 'password' => Hash::make($request->password),
@@ -31,7 +36,6 @@ class UserController extends Controller
             ]);
             event(new Registered($user));
 
-            // ✅ 2. TẠO EMPLOYEE HOẶC MANAGER
             if ($request->role === 'employee') {
                 Employee::create([
                     'user_id'    => $user->id,
@@ -52,7 +56,7 @@ class UserController extends Controller
 
             DB::commit();
             return redirect()
-                ->route('admin.users.create')
+                ->route('admin.hr.create')
                 ->with('success', 'User created successfully.');
 
         } catch (\Exception $e) {

@@ -25,17 +25,17 @@ class StoreProjectRequest extends FormRequest
             // 1. Tên dự án: Bắt buộc, chuỗi, tối đa 255 ký tự
             'name' => 'required|string|max:255',
 
-            // 2. Manager: Cho phép null (nếu chưa gán), nhưng nếu chọn thì ID phải tồn tại trong bảng managers
-            'manager_id' => 'nullable|exists:managers,id',
+            // 2. Manager:
+            'manager_id' => 'required|exists:managers,id',
 
             // 3. Mô tả: Cho phép null
             'description' => 'nullable|string',
 
             // 4. Ngày bắt đầu: Phải là định dạng ngày tháng
-            'start_date' => 'nullable|date',
+            'start_date' => 'required|date',
 
             // 5. Ngày kết thúc: Phải là ngày tháng VÀ phải sau hoặc bằng ngày bắt đầu
-            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'end_date' => 'required|date|after_or_equal:start_date',
         ];
     }
 

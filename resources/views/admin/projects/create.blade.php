@@ -1,16 +1,17 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
-@section('page_title', 'Create New Project')
+@section('title', 'Create New Project')
+@section('page-title', 'Project Management')
 
 @section('content')
 
-    {{-- Phần hiển thị thông báo thành công (Toast) như bài trước --}}
+    {{-- TOAST NOTIFICATION --}}
     @if(session('success'))
-        <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1050;">
-            <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1060;">
+            <div id="successToast" class="toast align-items-center text-white bg-success border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
-                    <div class="toast-body">
-                        <i class="fa-solid fa-check-circle me-2"></i> {{ session('success') }}
+                    <div class="toast-body fs-6">
+                        <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
@@ -18,84 +19,105 @@
         </div>
     @endif
 
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Create New Project</h5>
-            <a href="/admin" class="btn btn-light btn-sm">
-                <i class="fa-solid fa-arrow-left"></i> Back
+    {{-- MAIN CARD --}}
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white py-3 border-bottom border-light d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-primary">
+                <i class="bi bi-folder-plus me-2"></i>Initialize New Project
+            </h5>
+            <a href="{{ route('admin.projects.index') }}" class="btn btn-light btn-sm rounded-pill px-3">
+                <i class="bi bi-arrow-left me-1"></i> Back to List
             </a>
         </div>
 
-        <div class="card-body">
-            {{-- Form bắt đầu --}}
+        <div class="card-body p-4">
             <form method="POST" action="{{ route('admin.projects.store') }}">
                 @csrf
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Project Name <span class="text-danger">*</span></label>
-                        <input type="text" name="name"
-                               class="form-control @error('name') is-invalid @enderror"
-                               value="{{ old('name') }}"
-                               placeholder="Enter project name">
-                        @error('name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                <div class="row g-4">
+                    {{-- CỘT TRÁI: THÔNG TIN CƠ BẢN --}}
+                    <div class="col-md-7 border-end-md">
+                        <h6 class="text-uppercase text-muted fw-bold small mb-3">
+                            <i class="bi bi-info-circle me-1"></i> Project Essentials
+                        </h6>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Project Name <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-fonts"></i></span>
+                                <input type="text" name="name"
+                                       class="form-control @error('name') is-invalid @enderror"
+                                       value="{{ old('name') }}"
+                                       placeholder="Project title ...">
+                                @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Description & Scope</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-card-text"></i></span>
+                                <textarea name="description" rows="5"
+                                          class="form-control @error('description') is-invalid @enderror"
+                                          placeholder="Describe the project ...">{{ old('description') }}</textarea>
+                                @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Assign Manager</label>
-                        <select name="manager_id" class="form-select @error('manager_id') is-invalid @enderror">
-                            <option value="">-- Select Manager --</option>
-                            @foreach($managers as $manager)
-                                <option value="{{ $manager->id }}" {{ old('manager_id') == $manager->id ? 'selected' : '' }}>
-                                    {{ $manager->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <div class="form-text text-muted">Leave empty if no manager is assigned yet.</div>
-                        @error('manager_id')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                    {{-- CỘT PHẢI: QUẢN LÝ & THỜI GIAN --}}
+                    <div class="col-md-5 ps-md-4">
+                        <h6 class="text-uppercase text-muted fw-bold small mb-3">
+                            <i class="bi bi-calendar-range me-1"></i> Timeline & Team
+                        </h6>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Project Manager</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-primary"><i class="bi bi-person-workspace"></i></span>
+                                <select name="manager_id" class="form-select @error('manager_id') is-invalid @enderror">
+                                    <option value="">-- Unassigned --</option>
+                                    @foreach($managers as $manager)
+                                        <option value="{{ $manager->id }}" {{ old('manager_id') == $manager->id ? 'selected' : '' }}>
+                                            {{ $manager->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('manager_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="form-text">Select the person responsible for this project.</div>
+                        </div>
+
+                        <hr class="border-light my-4">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Start Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-calendar-check"></i></span>
+                                <input type="date" name="start_date" id="start_date"
+                                       class="form-control @error('start_date') is-invalid @enderror"
+                                       value="{{ old('start_date') }}">
+                                @error('start_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">End Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-calendar-x"></i></span>
+                                <input type="date" name="end_date" id="end_date"
+                                       class="form-control @error('end_date') is-invalid @enderror"
+                                       value="{{ old('end_date') }}">
+                                @error('end_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Start Date</label>
-                        <input type="date" name="start_date"
-                               class="form-control @error('start_date') is-invalid @enderror"
-                               value="{{ old('start_date') }}">
-                        @error('start_date')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">End Date</label>
-                        <input type="date" name="end_date"
-                               class="form-control @error('end_date') is-invalid @enderror"
-                               value="{{ old('end_date') }}">
-                        @error('end_date')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Description</label>
-                    <textarea name="description" rows="4"
-                              class="form-control @error('description') is-invalid @enderror"
-                              placeholder="Project details...">{{ old('description') }}</textarea>
-                    @error('description')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="d-flex justify-content-end gap-2">
-                    <button type="reset" class="btn btn-secondary">Reset</button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa-solid fa-save me-1"></i> Create Project
+                <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                    <button type="reset" class="btn btn-light px-4">Reset</button>
+                    <button type="submit" class="btn btn-primary px-4 shadow-sm">
+                        <i class="bi bi-rocket-takeoff me-1"></i> Launch Project
                     </button>
                 </div>
 
@@ -105,15 +127,57 @@
 
 @endsection
 
+@push('css')
+    <style>
+        /* Đường kẻ dọc giữa 2 cột trên màn hình lớn */
+        @media (min-width: 768px) {
+            .border-end-md {
+                border-right: 1px solid #dee2e6;
+            }
+        }
+        /* Style input group focus đẹp hơn */
+        .input-group-text {
+            border-right: 0;
+            background-color: #f8f9fa;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+        }
+        .form-control, .form-select {
+            border-left: 0;
+        }
+        /* Fix viền khi input group có lỗi */
+        .is-invalid {
+            border-left: 1px solid #dc3545 !important;
+        }
+    </style>
+@endpush
+
 @push('js')
     <script>
-        // Script kích hoạt Toast thông báo (như bài trước)
         document.addEventListener('DOMContentLoaded', function () {
+            // 1. Logic Toast Notification
             var toastEl = document.getElementById('successToast');
             if (toastEl) {
                 var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
                 toast.show();
             }
+
+            // 2. Logic Date Validation (UX Improvement)
+            // Khi chọn ngày bắt đầu, tự động set ngày kết thúc tối thiểu phải bằng ngày bắt đầu
+            const startDateInput = document.getElementById('start_date');
+            const endDateInput = document.getElementById('end_date');
+
+            startDateInput.addEventListener('change', function() {
+                if (this.value) {
+                    endDateInput.min = this.value;
+                    // Nếu ngày kết thúc hiện tại nhỏ hơn ngày bắt đầu mới chọn -> reset
+                    if (endDateInput.value && endDateInput.value < this.value) {
+                        endDateInput.value = '';
+                    }
+                }
+            });
         });
     </script>
 @endpush

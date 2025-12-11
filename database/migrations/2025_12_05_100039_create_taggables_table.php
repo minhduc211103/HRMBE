@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tag_id')->constrained('tags')->onDelete('cascade');
             $table->morphs('taggable');
-            $table->foreignId('tagged_by')->constrained('users')->onDelete('cascade');
+            $table->foreignId('tagged_by')->constrained('hr')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -19,9 +19,12 @@ Route::post('/admin-logout', [AdminAuthController::class, 'logout'])->name('admi
 //Bật middleware xem đăng nhập chưa trước khi điều hướng trang .
 Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('/', [\App\Http\Controllers\AdminController::class,'index'])->name('admin.index');
-    Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
-    Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
 
+    Route::get('/hr',[\App\Http\Controllers\UserController::class,'index'])->name('admin.hr.index');
+    Route::get('/hr/create', [UserController::class, 'create'])->name('admin.hr.create');
+    Route::post('/hr', [UserController::class, 'store'])->name('admin.hr.store');
+
+    Route::get('/projects',[\App\Http\Controllers\ProjectController::class,'index'])->name('admin.projects.index');
     Route::get('/projects/create', [\App\Http\Controllers\ProjectController::class, 'create'])->name('admin.projects.create');
     Route::post('/projects', [\App\Http\Controllers\ProjectController::class, 'store'])->name('admin.projects.store');
 

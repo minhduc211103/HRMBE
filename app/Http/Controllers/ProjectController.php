@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Auth;
 class ProjectController extends Controller
 {
     //
+    public function index(){
+        $projects = Project::with(['manager', 'tasks'])->get();
+        return view('admin.projects.index', compact('projects'));
+    }
     public function create(){
         $managers = Manager::all();
         return view('admin.projects.create', compact('managers'));
