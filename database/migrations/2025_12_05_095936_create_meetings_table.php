@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('location')->nullable();
             $table->boolean('is_online')->default(false);
             $table->string('meeting_url')->nullable();
-            $table->foreignId('created_by')->nullable()->constrained('hr')->onDelete('cascade');
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

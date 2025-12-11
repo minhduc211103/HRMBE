@@ -11,7 +11,6 @@ Route::get('/', function () {
     }
     return redirect('/admin-login');
 });
-
 Route::get('/admin-login', [AdminAuthController::class, 'showLoginForm']);
 Route::post('/admin-login', [AdminAuthController::class, 'login'])->name('admin.login');
 Route::post('/admin-logout', [AdminAuthController::class, 'logout'])->name('admin.logout');

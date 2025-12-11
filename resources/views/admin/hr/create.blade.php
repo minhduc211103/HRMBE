@@ -67,7 +67,7 @@
                             <label class="form-label fw-bold">Email Address <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
-                                <input type="email" name="email"
+                                <input type="text" name="email"
                                        class="form-control @error('email') is-invalid @enderror"
                                        value="{{ old('email') }}" placeholder="Please enter email !">
                                 @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror

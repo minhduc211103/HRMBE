@@ -23,11 +23,11 @@ class StoreUserRequest extends FormRequest
     {
         return [
             //
-            'email'      => 'required|email|unique:hr,email,NULL,id,deleted_at,NULL',
+            'email'      => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
             'password'   => 'required|min:8',
             'role'       => 'required|in:employee,manager',
             'name'       => 'required|string|max:255',
-            'phone'      => 'required|string|max:20',
+            'phone' => 'required|regex:/^[0-9]+$/|max:10|min:10',
 
             // validate theo role
             'manager_id' => 'required_if:role,employee|nullable|exists:managers,id',
@@ -43,12 +43,15 @@ class StoreUserRequest extends FormRequest
 
             'password.required' => 'Password is required.',
             'password.min'      => 'Password must be at least 8 characters.',
+            'phone.required' => 'Phone number is required.',
+            'phone.regex' => 'Phone number may contain digits only.',
+            'phone.max' => 'Phone number must be 10 characters.',
+            'phone.min' => 'Phone number must be 10 characters.',
+
 
             'role.required'     => 'Role is required.',
             'role.in'           => 'Invalid role.',
-
             'name.required'     => 'Full name is required.',
-            'phone.required'    => 'Phone number is required.',
 
             'manager_id.required_if' => 'Manager is required for employee.',
             'manager_id.exists'      => 'Selected manager does not exist.',

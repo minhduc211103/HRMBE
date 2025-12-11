@@ -178,12 +178,13 @@
             width: 50px;
             height: 50px;
         }
-        /* Xoay mũi tên khi mở */
-        .project-btn[aria-expanded="true"] .transition-icon {
+        /* Hiệu ứng xoay mũi tên khi mở accordion */
+        .btn-link[aria-expanded="true"] .transition-icon {
             transform: rotate(180deg);
         }
         .transition-icon {
             transition: transform 0.3s ease;
+            display: inline-block;
         }
         /* Hiệu ứng hover cho header dự án */
         .project-btn:hover {
