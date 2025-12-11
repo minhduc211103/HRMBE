@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
@@ -27,13 +28,14 @@ class TaskController extends Controller
             ], 500);
         }
     }
-    public function update(StoreTaskRequest $request, $id){
+    public function update(UpdateTaskRequest $request, $id){
         try{
             $task = Task::findOrFail($id);
             $data = $request->validated();
             $task->update($data);
             return response()->json([
                 'status' => 'success',
+                'success' => true,
                 'message' => 'Update task successfully',
                 'data' => $task
             ]);
@@ -41,6 +43,7 @@ class TaskController extends Controller
         catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
+                'success' => false,
                 'message' => 'Server error: ' . $e->getMessage()
             ]);
         }

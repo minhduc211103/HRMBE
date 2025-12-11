@@ -11,10 +11,9 @@ class EmployeeController extends Controller
     public function index(Request $request){
         try{
             $employee = $request->user()->employee;
-
             if (!$employee) {
                 return response()->json([
-                    'message' => 'Không tìm thấy employee'
+                    'message' => 'Not found'
                 ], 404);
             }
 
@@ -30,5 +29,27 @@ class EmployeeController extends Controller
             ]);
         }
     }
-
+    public function getManager(Request $request)
+    {
+        try{
+            $employee = $request->user()->employee;
+            $manager = $employee->manager;
+            if (!$manager) {
+                return response()->json([
+                    'message' => 'Not found'
+                ], 404);
+            }
+            else {
+                return response()->json([
+                    'success' => true,
+                    'data' => $manager->name
+                ]);
+            }
+        }
+        catch (\Exception $exception){
+            return response()->json([
+                'message' => $exception->getMessage()
+            ]);
+        }
+    }
 }

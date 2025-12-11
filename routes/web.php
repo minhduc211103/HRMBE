@@ -18,9 +18,7 @@ Route::post('/admin-logout', [AdminAuthController::class, 'logout'])->name('admi
 
 //Bật middleware xem đăng nhập chưa trước khi điều hướng trang .
 Route::prefix('admin')->middleware('admin.auth')->group(function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    });
+    Route::get('/', [\App\Http\Controllers\AdminController::class,'index'])->name('admin.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
     Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
 

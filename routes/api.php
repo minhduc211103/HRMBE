@@ -4,6 +4,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskControllerForEmployee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +14,9 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 // middleware cho employee
 Route::middleware(['auth:sanctum', 'role:employee'])->prefix('employee')->group(function () {
     Route::get('/', [EmployeeController::class, 'index']);
-
+    Route::get('/manager', [EmployeeController::class, 'getManager']);
+    Route::get('/tasks', [TaskControllerForEmployee::class, 'getTasks']);
+    Route::put('/tasks/{id}', [TaskControllerForEmployee::class, 'update']);
 });
 
 // middleware cho manager
