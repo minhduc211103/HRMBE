@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('path');
-            $table->foreignId('uploaded_by')->constrained('users'); // Ai up file
+            $table->foreignId('uploaded_by')->nullable()->constrained('users')->onDelete('set null'); // Ai up file
 
             // Tạo 2 cột: documentable_id và documentable_type
             $table->morphs('documentable');

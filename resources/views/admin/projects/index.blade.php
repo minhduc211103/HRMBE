@@ -264,11 +264,16 @@
                             {{-- 3. Modal Footer --}}
                             <div class="modal-footer bg-light justify-content-between p-3">
                                 {{-- Delete Button --}}
-                                <button type="button" class="btn btn-outline-danger border-0 d-flex align-items-center gap-2"
-                                        onclick="confirmDeleteProject({{ $project->id }})">
-                                    <i class="bi bi-trash3"></i>
-                                    <span class="d-none d-sm-inline">Delete Project</span>
-                                </button>
+                                <form id="delete-project-form-{{ $project->id }}"
+                                      action="{{route('admin.projects.destroy',$project->id)}}"
+                                      method="POST" class="d-none">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger border-0 d-flex align-items-center gap-2">
+                                        <i class="bi bi-trash3"></i>
+                                        <span class="d-none d-sm-inline">Delete Project</span>
+                                    </button>
+                                </form>
 
                                 {{-- Action Buttons --}}
                                 <div class="d-flex gap-2">
@@ -281,12 +286,7 @@
                         </form>
 
                         {{-- Hidden Delete Form --}}
-                        <form id="delete-project-form-{{ $project->id }}"
-                              action="#"
-                              method="POST" class="d-none">
-                            @csrf
-                            @method('DELETE')
-                        </form>
+
 
                     </div>
                 </div>

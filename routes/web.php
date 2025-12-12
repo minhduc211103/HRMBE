@@ -27,6 +27,7 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::get('/projects/create', [\App\Http\Controllers\ProjectController::class, 'create'])->name('admin.projects.create');
     Route::post('/projects', [\App\Http\Controllers\ProjectController::class, 'store'])->name('admin.projects.store');
     Route::put('/projects/{id}', [\App\Http\Controllers\ProjectController::class, 'updateFromAdmin'])->name('admin.projects.update');
+    Route::delete('/projects/{id}', [\App\Http\Controllers\ProjectController::class, 'destroy'])->name('admin.projects.destroy');
 
     Route::get('/meetings/create', [\App\Http\Controllers\MeetingController::class, 'create'])->name('admin.meetings.create');
     Route::post('/meetings', [\App\Http\Controllers\MeetingController::class, 'store'])->name('admin.meetings.store');

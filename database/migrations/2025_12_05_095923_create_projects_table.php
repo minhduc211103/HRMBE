@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('manager_id')->constrained('managers')->onDelete('set null');
+            $table->foreignId('manager_id')->nullable()->constrained('managers')->onDelete('set null');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('status')->default('pending'); //doi thanh new
+            $table->enum('status',['new', 'pending', 'active', 'done', 'cancelled'])->default('new');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->unsignedInteger('progress')->default(0); // % hoàn thành
