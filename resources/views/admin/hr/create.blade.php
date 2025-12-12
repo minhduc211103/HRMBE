@@ -144,7 +144,7 @@
                                 <input type="text" name="position"
                                        class="form-control @error('position') is-invalid @enderror"
                                        value="{{ old('position') }}"
-                                       placeholder="Ex: Senior Project Manager">
+                                       placeholder="Enter manager position ...">
                                 <div class="form-text">Specific title for this management role.</div>
                                 @error('position') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>

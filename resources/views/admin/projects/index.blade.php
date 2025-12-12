@@ -32,10 +32,8 @@
     <div class="accordion" id="projectAccordion">
         @forelse($projects as $project)
             <div class="card border-0 shadow-sm mb-3 overflow-hidden rounded-3">
-
                 {{-- 1. HEADER (Đã tách nút Setting ra khỏi nút Accordion) --}}
                 <div class="card-header bg-white p-0 d-flex align-items-stretch" id="heading-{{ $project->id }}">
-
                     {{-- A. Button kích hoạt Accordion (Chiếm phần lớn diện tích) --}}
                     <button class="btn btn-link text-decoration-none text-dark text-start p-3 flex-grow-1 project-btn collapsed position-relative"
                             type="button"
@@ -52,7 +50,7 @@
                                 <div>
                                     <h6 class="fw-bold mb-0 text-truncate" style="max-width: 250px;">{{ $project->name }}</h6>
                                     <small class="text-muted d-block text-truncate" style="max-width: 250px;">
-                                        {{ $project->description ?? 'No description' }}
+                                        {{ $project->manager?->name ?? 'Unassigned' }}
                                     </small>
                                 </div>
                             </div>
@@ -183,19 +181,19 @@
                         </div>
 
                         {{-- 2. Modal Body --}}
-                        <form action="{{route('admin.projects.update',$project->id)}}" method="POST">
+                        <form id="update-project-form-{{ $project->id }}"
+                              action="{{ route('admin.projects.update', $project->id) }}"
+                              method="POST">
                             @csrf
                             @method('PUT')
 
                             <div class="modal-body p-4 bg-light bg-opacity-10">
-
-                                {{-- SECTION A: READ-ONLY INFO (Thông tin định danh) --}}
+                                {{-- SECTION A: READ-ONLY INFO --}}
                                 <div class="p-3 bg-white rounded-3 shadow-sm border mb-4">
                                     <h6 class="text-uppercase text-primary fw-bold small mb-3 border-bottom pb-2">
                                         <i class="bi bi-shield-lock me-1"></i> Core Information (Read-only)
                                     </h6>
                                     <div class="row g-3">
-                                        {{-- Project Name --}}
                                         <div class="col-md-7">
                                             <label class="form-label fw-bold small text-muted">Project Name</label>
                                             <div class="input-group">
@@ -204,8 +202,6 @@
                                                        value="{{ $project->name }}" disabled readonly>
                                             </div>
                                         </div>
-
-                                        {{-- Manager --}}
                                         <div class="col-md-5">
                                             <label class="form-label fw-bold small text-muted">Project Manager</label>
                                             <div class="input-group">
@@ -217,77 +213,66 @@
                                     </div>
                                 </div>
 
-                                {{-- SECTION B: EDITABLE INFO (Thông tin được sửa) --}}
+                                {{-- SECTION B: EDITABLE INFO --}}
                                 <div class="p-3 bg-white rounded-3 shadow-sm border">
                                     <h6 class="text-uppercase text-success fw-bold small mb-3 border-bottom pb-2">
                                         <i class="bi bi-pencil-square me-1"></i> Update Details
                                     </h6>
-
-                                    {{-- Description --}}
                                     <div class="mb-4">
                                         <label class="form-label fw-bold small text-muted">Description & Scope</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-white text-muted"><i class="bi bi-card-text"></i></span>
                                             <textarea name="description" class="form-control" rows="4"
                                                       placeholder="Enter project description...">{{ $project->description }}</textarea>
-                                            @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
                                     </div>
-
                                     <div class="row g-3">
-                                        {{-- Start Date --}}
                                         <div class="col-md-6">
                                             <label class="form-label fw-bold small text-muted">Start Date</label>
                                             <div class="input-group">
                                                 <span class="input-group-text bg-white text-muted"><i class="bi bi-calendar-check"></i></span>
-                                                <input type="date" name="start_date" class="form-control" id="start_date"
+                                                <input type="date" name="start_date" class="form-control"
                                                        value="{{ $project->start_date ? \Carbon\Carbon::parse($project->start_date)->format('Y-m-d') : '' }}">
-                                                @error('start_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                             </div>
                                         </div>
-
-                                        {{-- End Date --}}
                                         <div class="col-md-6">
                                             <label class="form-label fw-bold small text-muted">End Date</label>
                                             <div class="input-group">
                                                 <span class="input-group-text bg-white text-muted"><i class="bi bi-calendar-x"></i></span>
-                                                <input type="date" name="end_date" class="form-control" id="end_date"
+                                                <input type="date" name="end_date" class="form-control"
                                                        value="{{ $project->end_date ? \Carbon\Carbon::parse($project->end_date)->format('Y-m-d') : '' }}">
-                                                @error('end_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
+                        </form> {{-- ĐÓNG FORM UPDATE TẠI ĐÂY --}}
 
-                            {{-- 3. Modal Footer --}}
-                            <div class="modal-footer bg-light justify-content-between p-3">
-                                {{-- Delete Button --}}
-                                <form id="delete-project-form-{{ $project->id }}"
-                                      action="{{route('admin.projects.destroy',$project->id)}}"
-                                      method="POST" class="d-none">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger border-0 d-flex align-items-center gap-2">
-                                        <i class="bi bi-trash3"></i>
-                                        <span class="d-none d-sm-inline">Delete Project</span>
-                                    </button>
-                                </form>
+                        {{-- 2. MODAL FOOTER (Chứa form Delete và Nút Save kết nối form trên) --}}
+                        <div class="modal-footer bg-light justify-content-between p-3">
 
-                                {{-- Action Buttons --}}
-                                <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary px-4 shadow-sm">
-                                        <i class="bi bi-check-lg me-1"></i> Save Changes
-                                    </button>
-                                </div>
+                            {{-- A. DELETE FORM (Độc lập) --}}
+                            <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger border-0 d-flex align-items-center gap-2">
+                                    <i class="bi bi-trash3"></i>
+                                    <span class="d-none d-sm-inline">Delete Project</span>
+                                </button>
+                            </form>
+
+                            {{-- B. ACTION BUTTONS --}}
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+
+                                {{-- Nút Save: Liên kết ngược lên form update bằng thuộc tính 'form' --}}
+                                <button type="submit"
+                                        form="update-project-form-{{ $project->id }}"
+                                        class="btn btn-primary px-4 shadow-sm">
+                                    <i class="bi bi-check-lg me-1"></i> Save Changes
+                                </button>
                             </div>
-                        </form>
-
-                        {{-- Hidden Delete Form --}}
-
-
+                        </div>
                     </div>
                 </div>
             </div>
