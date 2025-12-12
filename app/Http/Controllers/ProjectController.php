@@ -21,6 +21,44 @@ class ProjectController extends Controller
         $managers = Manager::all();
         return view('admin.projects.create', compact('managers'));
     }
+    public function updateFromAdmin(Request $request, $id)
+    {
+        try {
+            // 1. Tìm Project theo ID (Nếu không thấy sẽ ném lỗi ModelNotFoundException)
+            $project = Project::findOrFail($id);
+
+            // 2. Validate dữ liệu đầu vào
+            // 'nullable': cho phép để trống
+            // 'after_or_equal:start_date': Ngày kết thúc phải sau hoặc bằng ngày bắt đầu
+            $validated = $request->validate([
+                'description' => 'nullable|string|max:2000',
+                'start_date'  => 'required|date',
+                'end_date'    => 'required|date|after_or_equal:start_date',
+            ], [
+                // Tùy chỉnh thông báo lỗi (Optional)
+                'end_date.after_or_equal' => 'The end date must be after or equal to the start date.',
+            ]);
+
+            // 3. Thực hiện cập nhật
+            $project->update([
+                'description' => $validated['description'],
+                'start_date'  => $validated['start_date'],
+                'end_date'    => $validated['end_date'],
+            ]);
+
+            // 4. Trả về thông báo thành công
+            return redirect()->back()->with('success', 'Project details updated successfully!');
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Trường hợp ID không tồn tại
+            return redirect()->back()->with('error', 'Project not found or has been deleted.');
+
+        } catch (\Exception $e) {
+            // Các lỗi khác (Lỗi DB, Lỗi code...)
+            // Log::error("Error updating project {$id}: " . $e->getMessage()); // Ghi log để debug
+            return redirect()->back()->with('error', 'An error occurred while updating: ' . $e->getMessage());
+        }
+    }
     public function store(StoreProjectRequest $request){
         try{
             Project::create($request->validated());
@@ -65,7 +103,8 @@ class ProjectController extends Controller
             ], 500);
         }
     }
-    public function update(UpdateProjectRequest $request, $id)
+    // Update của manager
+    public function updateFromManager(UpdateProjectRequest $request, $id)
         {
             try {
                 $project = Project::findOrFail($id);

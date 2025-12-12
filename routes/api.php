@@ -25,7 +25,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     Route::get('/employees', [ManagerController::class, 'getEmployees']);
     Route::get('/projects', [ManagerController::class, 'getProjects']);
     Route::get('/projects/{id}', [ProjectController::class, 'show']);
-    Route::put('/projects/{id}', [ProjectController::class, 'update']);
+    Route::put('/projects/{id}', [ProjectController::class, 'updateFromManager']);
     Route::post('/tasks', [TaskController::class, 'store']);
     Route::put('/tasks/{id}', [TaskController::class, 'update']);
     Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
