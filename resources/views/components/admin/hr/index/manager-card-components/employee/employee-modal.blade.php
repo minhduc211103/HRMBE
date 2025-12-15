@@ -87,7 +87,7 @@
                         </div>
                     </div>
                 </div>
-               <x-admin.hr.index.btn-canel/>
+            <x-admin.hr.index.btn-canel/>
         </div>
     </div>
 </div>

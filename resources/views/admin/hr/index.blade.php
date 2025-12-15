@@ -5,7 +5,6 @@
 
     {{-- HEADER & BUTTON --}}
     <x-admin.hr.index.header/>
-
     {{-- MAIN CONTENT: DANH SÁCH MANAGER --}}
     <div class="accordion" id="hrAccordion">
         @forelse($managers as $manager)
