@@ -1,0 +1,26 @@
+<?php
+
+namespace App\View\Components\Admin\Hr\Index;
+
+use Closure;
+use Illuminate\Contracts\View\View;
+use Illuminate\View\Component;
+
+class BtnCanel extends Component
+{
+    /**
+     * Create a new component instance.
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Get the view / contents that represent the component.
+     */
+    public function render(): View|Closure|string
+    {
+        return view('components.admin.hr.index.btn-canel');
+    }
+}

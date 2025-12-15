@@ -18,9 +18,7 @@
                     <!-- BUTTON -->
                     <x-auth.login.button-login />
                 </form>
-
             </div>
-
         </div>
     </div>
 @endsection
