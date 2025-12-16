@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -13,11 +14,6 @@ class ProjectControllerForManager extends Controller
     public function show(Request $request,$id)
     {
         try {
-            // ✅ Eager Loading: Lấy Project kèm theo:
-            // 1. tasks: Danh sách công việc của dự án
-            // 2. tasks.employee: Thông tin nhân viên làm task đó (để hiện tên thay vì id)
-            // 3. manager: Thông tin người quản lý dự án (nếu cần)
-
             $project = Project::with(['manager', 'tasks.employee'])
                 ->findOrFail($id);
 
@@ -48,11 +44,10 @@ class ProjectControllerForManager extends Controller
             // $request->validated() chỉ lấy những trường đã được khai báo trong rules
             // Hàm fill() sẽ điền dữ liệu vào model nhưng chưa lưu
             $project->fill($request->validated());
-
             if ($request->status === 'completed') {
                 $project->progress = 100;
             }
-            // 4. Lưu vào DB
+            // Lưu vào DB
             $project->save();
 
             return response()->json([
@@ -65,6 +60,37 @@ class ProjectControllerForManager extends Controller
             return response()->json(['message' => 'Project not found'], 404);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Update failed: ' . $e->getMessage()], 500);
+        }
+    }
+    public function store(StoreProjectRequest $request){
+        try{
+            Project::create($request->validated());
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Project created successfully'
+            ]);
+        }
+        catch (\Exception $exception){
+            return response()->json([
+                'status' => 'error',
+                'message' => $exception->getMessage()
+            ]);
+        }
+    }
+    public function destroy($id){
+        try{
+            $project = Project::findOrFail($id);
+            $project->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Project deleted successfully'
+            ]);
+        }
+        catch (\Exception $exception){
+           return response()->json([
+               'status' => 'error',
+               'message' => $exception->getMessage()
+           ]);
         }
     }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectControllerForManager;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskControllerForEmployee;
 use Illuminate\Http\Request;
@@ -24,6 +25,8 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     Route::get('/', [ManagerController::class, 'index']);
     Route::get('/employees', [ManagerController::class, 'getEmployees']);
     Route::get('/projects', [ManagerController::class, 'getProjects']);
+    Route::post('/projects', [ProjectControllerForManager::class, 'store']);
+    Route::delete('/projects/{id}', [ProjectControllerForManager::class, 'destroy']);
     Route::get('/projects/{id}', [\App\Http\Controllers\ProjectControllerForManager::class, 'show']);
     Route::put('/projects/{id}', [\App\Http\Controllers\ProjectControllerForManager::class, 'updateFromManager']);
     Route::post('/tasks', [TaskController::class, 'store']);

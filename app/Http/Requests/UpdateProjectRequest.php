@@ -22,12 +22,12 @@ class UpdateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'        => 'sometimes|required|string|max:255',
-            'manager_id'  => 'nullable|exists:managers,id',
+            'name'        => 'required|string|max:255',
+            'manager_id'  => 'required|exists:managers,id',
             'description' => 'nullable|string',
-            'start_date'  => 'nullable|date',
-            'end_date'    => 'nullable|date|after_or_equal:start_date',
-            'status'      => 'sometimes|in:new,pending,active,done,cancelled',
+            'start_date'  => 'required|date',
+            'end_date'    => 'required|date|after_or_equal:start_date',
+            'status'      => 'required|in:new,pending,active,done,cancelled',
             'progress'    => 'sometimes|integer|min:0|max:100',
         ];
     }
