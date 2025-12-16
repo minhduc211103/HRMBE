@@ -11,4 +11,13 @@
             </div>
         </div>
     </div>
+    <style>
+        /* Hiệu ứng hover cho Card thống kê */
+        .card {
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px); /* Nổi lên nhẹ khi di chuột vào */
+        }
+    </style>
 </div>

@@ -25,20 +25,8 @@
                     icon="bi bi-folder-fill"
                     gradient="linear-gradient(45deg, #e74a3b, #be2617)"
                 />
-
             </div>
-
             <x-admin.dash-board.empty-block/>
         </div>
     </div>
-
-    <style>
-        /* Hiệu ứng hover cho Card thống kê */
-        .card {
-            transition: transform 0.2s;
-        }
-        .card:hover {
-            transform: translateY(-5px); /* Nổi lên nhẹ khi di chuột vào */
-        }
-    </style>
 @endsection

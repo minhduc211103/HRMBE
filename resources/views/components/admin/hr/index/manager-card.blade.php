@@ -9,7 +9,6 @@
                 aria-expanded="false">
             {{-- Thông tin Manager --}}
             <x-admin.hr.index.manager-card-components.manager.manager-info :name="$manager->name" :email="$manager->user->email"/>
-
             {{-- Số lượng nhân viên & Mũi tên --}}
             <x-admin.hr.index.manager-card-components.manager.employee-count :employeeCount="$manager->employees->count()"/>
         </button>

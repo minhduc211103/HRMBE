@@ -21,9 +21,12 @@ class TaskControllerForEmployee extends Controller
                 ], 404);
             }
 
-            // Lấy tất cả task của employee và kèm project
-            $tasks = $employee->tasks()->with('project')->get();
-
+            $tasks = $employee->tasks()
+                ->whereHas('project', function ($q) {
+                    $q->whereNull('deleted_at');
+                })
+                ->with('project')
+                ->get();
             return response()->json([
                 'message' => 'Get tasks successfully',
                 'success' => true,

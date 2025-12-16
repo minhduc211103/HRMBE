@@ -8,3 +8,14 @@
         </div>
     </div>
 </div>
+@push('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var toastEl = document.getElementById('successToast');
+            if (toastEl) {
+                var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+                toast.show();
+            }
+        });
+    </script>
+@endpush

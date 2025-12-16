@@ -1,7 +1,5 @@
 <div class="d-flex min-vh-100 bg-light">
-
     <div class="col-md-2 bg-white border-end shadow-sm d-flex flex-column p-0 sticky-top" style="height: 100vh;">
-
         <div class="p-4 border-bottom">
             <h5 class="fw-bold text-primary mb-0">
                 <i class="bi bi-shield-lock-fill me-2"></i>ADMIN PANEL
