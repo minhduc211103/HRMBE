@@ -8,12 +8,15 @@ use Illuminate\Http\Request;
 class ManagerController extends Controller
 {
 
-    public function index(Request $request){
+    public function getManager(Request $request){
         try{
-            $manager = $request->user()->manager;
+            $manager = $request->user()
+                ->manager()
+                ->with('user:id,email')
+                ->firstOrFail();
             if (!$manager) {
                 return response()->json([
-                    'message' => 'Không tìm thấy manager'
+                    'message' => 'Not found'
                 ], 404);
             }
 
@@ -25,7 +28,6 @@ class ManagerController extends Controller
         catch (\Exception $exception){
             return response()->json([
                 'message' => $exception->getMessage()
-
             ]);
         }
     }
@@ -33,7 +35,10 @@ class ManagerController extends Controller
     {
         try{
             $manager = $request->user()->manager;
-            $employees = $manager->employees;
+            $employees = $manager
+                        ->employees()
+                        ->with('user:id,email')
+                        ->get();
             return response()->json([
                 'success' => true,
                 'data' => $employees

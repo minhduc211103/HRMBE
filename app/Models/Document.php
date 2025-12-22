@@ -20,7 +20,7 @@ class Document extends Model
         return $this->morphTo();
     }
 
-    public function uploader()
+    public function user()
     {
         return $this->belongsTo(User::class, 'uploaded_by');
     }

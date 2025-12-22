@@ -8,9 +8,12 @@ use Illuminate\Http\Request;
 class EmployeeController extends Controller
 {
     //
-    public function index(Request $request){
+    public function getEmployee(Request $request){
         try{
-            $employee = $request->user()->employee;
+            $employee = $request->user()
+                ->employee()
+                ->with(['user:id,email,role','manager:id,name'])
+                ->firstOrFail();
             if (!$employee) {
                 return response()->json([
                     'message' => 'Not found'

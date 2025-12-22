@@ -4,17 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use App\Traits\HandleUploadTrait ;
 use App\Models\Project;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProjectControllerForManager extends Controller
 {
     //
+    use HandleUploadTrait ;
+    public function store(StoreProjectRequest $request){
+        $storedFiles = [];
+        DB::beginTransaction();
+        try{
+            // Insert dữ liệu cơ bản của project
+            $project = Project::create($request->validated());
+            // Kéo file về
+            $storedFiles = $this->handleUpload($request, $project);
+            DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Project created successfully'
+            ]);
+
+        }
+        catch (\Exception $exception){
+            DB::rollBack();
+            $this->rollbackFiles($storedFiles); // Clear file do lỗi
+            return response()->json([
+                'status' => 'error',
+                'message' => $exception->getMessage()
+            ]);
+        }
+    }
     public function show(Request $request,$id)
     {
         try {
-            $project = Project::with(['manager', 'tasks.employee'])
+            $project = Project::with([
+                'manager',
+
+                'tasks.employee',
+                'tasks.documents.user.manager',  // Lấy document của từng task + user upload + manager của user đó
+                'tasks.documents.user.employee', // Lấy document của từng task + user upload + employee của user đó
+
+                'documents.user.manager',
+                'documents.user.employee'
+            ])
                 ->findOrFail($id);
 
             return response()->json([
@@ -36,6 +72,8 @@ class ProjectControllerForManager extends Controller
             ], 500);
         }
     }
+
+
     // Update của manager
     public function updateFromManager(UpdateProjectRequest $request, $id)
     {
@@ -62,21 +100,7 @@ class ProjectControllerForManager extends Controller
             return response()->json(['message' => 'Update failed: ' . $e->getMessage()], 500);
         }
     }
-    public function store(StoreProjectRequest $request){
-        try{
-            Project::create($request->validated());
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Project created successfully'
-            ]);
-        }
-        catch (\Exception $exception){
-            return response()->json([
-                'status' => 'error',
-                'message' => $exception->getMessage()
-            ]);
-        }
-    }
+
     public function destroy($id){
         try{
             $project = Project::findOrFail($id);

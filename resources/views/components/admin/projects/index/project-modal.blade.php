@@ -53,7 +53,7 @@
                             <div class="input-group">
                                 <span class="input-group-text bg-white text-muted"><i class="bi bi-card-text"></i></span>
                                 <textarea name="description" class="form-control" rows="4"
-                                          placeholder="Enter project description...">{{ $project->description }}</textarea>
+                                          placeholder="Enter project description..." disabled readonly>{{ $project->description }}</textarea>
                             </div>
                         </div>
                         <div class="row g-3">
@@ -61,7 +61,7 @@
                                 <label class="form-label fw-bold small text-muted">Start Date</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white text-muted"><i class="bi bi-calendar-check"></i></span>
-                                    <input type="date" name="start_date" class="form-control"
+                                    <input type="date" name="start_date" class="form-control" disabled readonly
                                            value="{{ $project->start_date ? \Carbon\Carbon::parse($project->start_date)->format('Y-m-d') : '' }}">
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                                 <label class="form-label fw-bold small text-muted">End Date</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white text-muted"><i class="bi bi-calendar-x"></i></span>
-                                    <input type="date" name="end_date" class="form-control"
+                                    <input type="date" name="end_date" class="form-control" disabled readonly
                                            value="{{ $project->end_date ? \Carbon\Carbon::parse($project->end_date)->format('Y-m-d') : '' }}">
                                 </div>
                             </div>
@@ -79,25 +79,25 @@
             </form>
 
             {{--  MODAL FOOTER --}}
-            <div class="modal-footer bg-light justify-content-between p-3">
+            <div class="modal-footer bg-light justify-content-end p-3">
                 {{-- DELETE FORM  --}}
-                <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-outline-danger border-0 d-flex align-items-center gap-2">
-                        <i class="bi bi-trash3"></i>
-                        <span class="d-none d-sm-inline">Delete Project</span>
-                    </button>
-                </form>
+{{--                <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST">--}}
+{{--                    @csrf--}}
+{{--                    @method('DELETE')--}}
+{{--                    <button type="submit" class="btn btn-outline-danger border-0 d-flex align-items-center gap-2">--}}
+{{--                        <i class="bi bi-trash3"></i>--}}
+{{--                        <span class="d-none d-sm-inline">Delete Project</span>--}}
+{{--                    </button>--}}
+{{--                </form>--}}
                 {{-- ACTION BUTTONS --}}
                 <div class="d-flex gap-2">
-                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-light border " data-bs-dismiss="modal">Cancel</button>
 {{--                        Button Cập nhật form ở trên --}}
-                    <button type="submit"
-                            form="update-project-form-{{ $project->id }}"
-                            class="btn btn-primary px-4 shadow-sm">
-                        <i class="bi bi-check-lg me-1"></i> Save Changes
-                    </button>
+{{--                    <button type="submit"--}}
+{{--                            form="update-project-form-{{ $project->id }}"--}}
+{{--                            class="btn btn-primary px-4 shadow-sm">--}}
+{{--                        <i class="bi bi-check-lg me-1"></i> Save Changes--}}
+{{--                    </button>--}}
                 </div>
             </div>
         </div>
