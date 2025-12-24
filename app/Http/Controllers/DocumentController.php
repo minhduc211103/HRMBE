@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Document;
 use App\Models\Project;
 use App\Models\Task;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
@@ -13,7 +14,7 @@ use App\Traits\HandleUploadTrait;
 use Illuminate\Support\Facades\DB;
 class DocumentController extends Controller
 {
-    use HandleUploadTrait;
+    use HandleUploadTrait ,AuthorizesRequests ;
     public function upload(Request $request)
     {
         $storedFiles = [];
@@ -54,16 +55,22 @@ class DocumentController extends Controller
     {
         try{
             $document = Document::findOrFail($id);
-            $user = auth()->user();
-            $parent = $document->documentable; // Lấy Project hoặc Task liên quan
-            // Chủ sở hữu
-            $isOwner = $user->id === $document->uploaded_by;
-            // Kiểm tra user hiện tại có phải manager ko
-            $isManager = ($document->documentable_type === 'App\Models\Project' && $user->id === $parent->manager_id);
-
-            if (!$isOwner && !$isManager) {
-                return response()->json(['message' => 'Not allowed'], 403);
-            }
+//            $user = auth()->user();
+//            $parent = $document->documentable; // Lấy Project hoặc Task liên quan
+//            // Chủ sở hữu
+//            $isOwner = $user->id === $document->uploaded_by;
+//            $isAssignedToTask = false;
+//            if ($document->documentable_type === 'App\Models\Task') {
+//                // Kiểm tra xem ID của employee được giao task có khớp với employee của user hiện tại không
+//                // Giả sử quan hệ là $user->employee->id
+//                if ($parent && $user->employee && $parent->employee_id === $user->employee->id) {
+//                    $isAssignedToTask = true;
+//                }
+//            }
+//            if (!$isOwner && !$isAssignedToTask) {
+//                return response()->json(['message' => 'Not allowed'], 403);
+//            }
+            $this->authorize('download', $document);
             if (!Storage::disk('local')->exists($document->path)) {
                 return response()->json(['message' => 'Not found'], 404);
             }
@@ -82,12 +89,7 @@ class DocumentController extends Controller
         try{
             $user = auth()->user();
             $document = Document::findOrFail($id);
-            $parent = $document->documentable;
-            $isOwner = $user->id === $document->uploaded_by;
-            $isManager = ($document->documentable_type === 'App\Models\Project' && $user->id === $parent->manager_id);
-            if (!$isOwner && !$isManager) {
-                return response()->json(['message' => 'Not allowed'], 403);
-            }
+            $this->authorize('delete', $document);
             $filePath = $document->path;
             $document->delete();
             if (Storage::disk('local')->exists($filePath)) {

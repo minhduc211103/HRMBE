@@ -25,7 +25,11 @@ class TaskControllerForEmployee extends Controller
                 ->whereHas('project', function ($q) {
                     $q->whereNull('deleted_at');
                 })
-                ->with('project')
+                ->with([
+                    'project:id,name',
+                    'documents.user.manager',
+                    'documents.user.employee',
+                ])
                 ->get();
             return response()->json([
                 'message' => 'Get tasks successfully',
